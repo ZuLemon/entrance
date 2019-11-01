@@ -2,9 +2,10 @@ package org.lemon.entrance.service;
 
 import org.lemon.entrance.model.EntranceRBACModel;
 import org.lemon.entrance.utils.*;
-
+import org.springframework.stereotype.Service;
 import java.util.Calendar;
 
+@Service
 public class DoorControlService {
     /**
      * 查询控制器状态
