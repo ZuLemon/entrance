@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/test")
-public class Test {
+public class TestController {
     private ReturnModel model=null;
     @RequestMapping("get")
     @ResponseBody

@@ -1,18 +1,25 @@
 package org.lemon.entrance.service;
 
+import org.lemon.entrance.model.EntranceControllerModel;
 import org.lemon.entrance.model.EntranceRBACModel;
 import org.lemon.entrance.utils.*;
 import org.springframework.stereotype.Service;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class DoorControlService {
+    DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 查询控制器状态
      * @param controller
      * @return
      */
-    public DoorControlResponse queryStatus(EntranceController controller) {
+    public DoorControlResponse queryStatus(EntranceControllerModel controller) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x20;
@@ -29,7 +36,7 @@ public class DoorControlService {
      * @param index
      * @return
      */
-    public DoorControlResponse queryRecordIndex(EntranceController controller, int index) {
+    public DoorControlResponse queryRecordIndex(EntranceControllerModel controller, int index) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0xB0;
@@ -47,7 +54,7 @@ public class DoorControlService {
      * @param door
      * @return
      */
-    public DoorControlResponse openDoor(EntranceController controller, int door) {
+    public DoorControlResponse openDoor(EntranceControllerModel controller, int door) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x40;
@@ -64,7 +71,7 @@ public class DoorControlService {
      * @param online 0x03在线 0x02 常闭 01常开
      * @return
      */
-    public DoorControlResponse setDoorOpenDelay(EntranceController controller, int door, int delay, int online) {
+    public DoorControlResponse setDoorOpenDelay(EntranceControllerModel controller, int door, int delay, int online) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x80;
@@ -85,18 +92,20 @@ public class DoorControlService {
         return res;
     }
 
-    public DoorControlResponse timeCheck(EntranceController controller) {
-
+    public DoorControlResponse timeCheck(EntranceControllerModel controller,String date) throws ParseException {
+        Calendar calendar=Calendar.getInstance();
+        Date myDate2 = dateFormat2.parse(date);
+        calendar.setTime(myDate2);
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x30;
-        packet.data[0] = (byte) ByteUtils.intToByte((Calendar.getInstance().get(Calendar.YEAR) - Calendar.getInstance().get(Calendar.YEAR) % 100) / 100);
-        packet.data[1] = (byte)ByteUtils.intToByte((int)(Calendar.getInstance().get(Calendar.YEAR) % 100)); //st.GetMonth());
-        packet.data[2] = (byte)ByteUtils.intToByte(Calendar.getInstance().get(Calendar.MONTH));
-        packet.data[3] = (byte)ByteUtils.intToByte(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        packet.data[4] = (byte)ByteUtils.intToByte(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        packet.data[5] = (byte)ByteUtils.intToByte(Calendar.getInstance().get(Calendar.MINUTE));
-        packet.data[6] = (byte)ByteUtils.intToByte(Calendar.getInstance().get(Calendar.SECOND));
+        packet.data[0] = ByteUtils.intToHexByte((calendar.get(Calendar.YEAR) - Calendar.getInstance().get(Calendar.YEAR) % 100) / 100);
+        packet.data[1] = ByteUtils.intToHexByte((int)(calendar.get(Calendar.YEAR) % 100)); //st.GetMonth());
+        packet.data[2] = ByteUtils.intToHexByte(calendar.get(Calendar.MONTH));
+        packet.data[3] = ByteUtils.intToHexByte(calendar.get(Calendar.DAY_OF_MONTH));
+        packet.data[4] = ByteUtils.intToHexByte(calendar.get(Calendar.HOUR_OF_DAY));
+        packet.data[5] = ByteUtils.intToHexByte(calendar.get(Calendar.MINUTE));
+        packet.data[6] = ByteUtils.intToHexByte(calendar.get(Calendar.SECOND));
         DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         if(res!=null) {
             Boolean bSame = true;
@@ -118,7 +127,7 @@ public class DoorControlService {
         return res;
     }
 
-    public DoorControlResponse timeRead(EntranceController controller) {
+    public DoorControlResponse timeRead(EntranceControllerModel controller) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x32;
@@ -132,7 +141,7 @@ public class DoorControlService {
      * 添加或修改
      * @param rbac
      */
-    public DoorControlResponse rbacInsertOrUpdate(EntranceController controller, EntranceRBACModel rbac) {
+    public DoorControlResponse rbacInsertOrUpdate(EntranceControllerModel controller, EntranceRBACModel rbac) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x50;
@@ -186,7 +195,7 @@ public class DoorControlService {
      * @param rbac
      * @return
      */
-    public DoorControlResponse rbacRemove(EntranceController controller, EntranceRBACModel rbac) {
+    public DoorControlResponse rbacRemove(EntranceControllerModel controller, EntranceRBACModel rbac) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x52;
@@ -213,7 +222,7 @@ public class DoorControlService {
      * @param controller
      * @return
      */
-    public DoorControlResponse rbacClear(EntranceController controller) {
+    public DoorControlResponse rbacClear(EntranceControllerModel controller) {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x54;
@@ -237,7 +246,7 @@ public class DoorControlService {
      * @param controller
      * @return
      */
-    public DoorControlResponse rbacCount(EntranceController controller) {
+    public DoorControlResponse rbacCount(EntranceControllerModel controller) {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x58;
@@ -254,7 +263,7 @@ public class DoorControlService {
      * @param controller
      * @return
      */
-    public DoorControlResponse getIndexRbac(EntranceController controller, int index) {
+    public DoorControlResponse getIndexRbac(EntranceControllerModel controller, int index) {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x5C;
