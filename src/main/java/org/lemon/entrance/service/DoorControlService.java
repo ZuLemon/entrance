@@ -79,6 +79,7 @@ public class DoorControlService {
         packet.data[0] = (byte)(door & 0xff);
         packet.data[1] = (byte)(online & 0xff);
         packet.data[2] = (byte)(delay & 0xff);
+
         DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         if(res!=null) {
             if (res.getRecv()[0] == res.getRecv()[8] && res.getRecv()[1] == res.getRecv()[9] && res.getRecv()[2] == res.getRecv()[10]) {
@@ -272,6 +273,37 @@ public class DoorControlService {
         if(res!=null){
             res.setSuccess(true);
             res.setMsg(String.valueOf(ByteUtils.bytesToInt(ByteUtils.subBytes(res.getRecv(),8,4))));
+        }
+        return res;
+    }
+
+    /***
+     * 设置检测服务器
+     * @param controller
+     * @param listenIp
+     * @param listenPort
+     * @return
+     */
+    public DoorControlResponse setListenServer(EntranceControllerModel controller,String listenIp,Integer listenPort) {
+        DoorControlPacket packet = new DoorControlPacket();
+        packet.iDevSn = Long.parseLong(controller.getDevsn());
+        packet.functionID=0x90;
+        String ips[] = listenIp.split(".");
+        if(ips.length==4){
+            packet.data[0] = Byte.parseByte(ips[0]);
+            packet.data[1] = Byte.parseByte(ips[0]);
+            packet.data[2] = Byte.parseByte(ips[0]);
+            packet.data[3] = Byte.parseByte(ips[0]);
+        }
+        packet.data[4] = (byte)((listenPort & 0xff));
+        packet.data[5] = (byte)((listenPort >> 8) & 0xff);
+        //每隔5秒发送一次: 05 (定时上传信息的周期为5秒 [正常运行时每隔5秒发送一次  有刷卡时立即发送])
+        packet.data[6] = 5;
+
+        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        if(res.getRecv()[8]==1){
+            res.setSuccess(true);
+            res.setMsg("设置接收服务器的IP和端口 \t 成功...");
         }
         return res;
     }

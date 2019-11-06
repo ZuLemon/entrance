@@ -7,6 +7,7 @@ import org.lemon.entrance.model.EntranceRBACModel;
 import org.lemon.entrance.model.ReturnModel;
 import org.lemon.entrance.service.DoorControlService;
 import org.lemon.entrance.utils.DoorControlResponse;
+import org.lemon.entrance.utils.JsonXMLUtils;
 import org.lemon.entrance.utils.LoggerUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,14 +48,14 @@ public class EntranceControllerController {
     @ResponseBody
     public ReturnModel openDoor(@RequestBody EntranceControllerModel controller, @PathVariable("door") int door) {
         returnModel = new ReturnModel();
-//        DoorControlResponse response =  service.openDoor(controller,door);
-//        if(null!=response && response.isSuccess()){
-//            returnModel.setObject(response);
-//        }else {
-//            returnModel.setSuccess(false);
-//            returnModel.setException("开门失败");
-//        }
-        LoggerUtils.info(String.valueOf(door));
+        DoorControlResponse response =  service.openDoor(controller,door);
+        if(null!=response && response.getErrCode()==0){
+            returnModel.setObject(response);
+        }else {
+            returnModel.setSuccess(false);
+            returnModel.setException("开门失败");
+        }
+//        LoggerUtils.info(String.valueOf(door));
         return returnModel;
     }
 
@@ -71,7 +72,7 @@ public class EntranceControllerController {
     public ReturnModel setDoorOpenDelay(@RequestBody EntranceControllerModel controller, @PathVariable("door") int door, int delay, int online) {
         returnModel = new ReturnModel();
         DoorControlResponse response = service.setDoorOpenDelay(controller, door, delay, online);
-        if (null != response && response.isSuccess()) {
+        if(null!=response && response.getErrCode()==0){
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
@@ -90,7 +91,7 @@ public class EntranceControllerController {
     public ReturnModel timeRead(@RequestBody EntranceControllerModel controller) {
         returnModel = new ReturnModel();
         DoorControlResponse response = service.timeRead(controller);
-        if (null != response && response.isSuccess()) {
+        if(null!=response && response.getErrCode()==0){
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
@@ -112,7 +113,7 @@ public class EntranceControllerController {
         DoorControlResponse response = null;
         try {
             response = service.timeCheck(controller, date);
-            if (null != response && response.isSuccess()) {
+            if(null!=response && response.getErrCode()==0){
                 returnModel.setObject(response);
             } else {
                 returnModel.setSuccess(false);
@@ -126,14 +127,35 @@ public class EntranceControllerController {
         return returnModel;
     }
 
+    /***
+     * 添加更新权限
+     * @param models
+     *   {
+     *    	"controller": {
+     *      	"ip":"192.168.1.13",
+     *       	"devsn":"122217403",
+     *       	"port":60000
+     *    	},
+     *    	"rbac":{
+     *    		"devsn":"122217403",
+     *    		"cid":"22323636",
+     *    		"tmstart":"2019-11-06 10:00:00",
+     *    		"tmend":"2019-12-01 10:00:00",
+     *    		"door1":01
+     *    	}
+     *    }
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("rbacInsertOrUpdate")
     @ResponseBody
-    public ReturnModel rbacInsertOrUpdate(@RequestBody ControllerAndRBAC model) {
+    public ReturnModel rbacInsertOrUpdate(@RequestBody Map<String,Object> models) throws Exception {
         returnModel = new ReturnModel();
-
+        EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
+        EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
         DoorControlResponse response = null;
-        response = service.rbacInsertOrUpdate(model.controller, model.rbac);
-        if (null != response && response.isSuccess()) {
+        response = service.rbacInsertOrUpdate(controllerModel, rbacModel);
+        if(null!=response && response.getErrCode()==0){
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
@@ -141,8 +163,43 @@ public class EntranceControllerController {
         }
         return returnModel;
     }
-    private class ControllerAndRBAC{
-        public EntranceControllerModel controller;
-        public EntranceRBACModel rbac;
+
+    /***
+     * 清除卡号权限
+     * @param models
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("rbacRemove")
+    @ResponseBody
+    public ReturnModel rbacRemove(@RequestBody Map<String,Object> models) throws Exception {
+        returnModel = new ReturnModel();
+        EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
+        EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
+        DoorControlResponse response = null;
+        response = service.rbacRemove(controllerModel, rbacModel);
+        if(null!=response && response.getErrCode()==0){
+            returnModel.setObject(response);
+        } else {
+            returnModel.setSuccess(false);
+            returnModel.setException("清除权限失败");
+        }
+        return returnModel;
     }
+
+    @RequestMapping("rbacClear")
+    @ResponseBody
+    public ReturnModel rbacClear(@RequestBody EntranceControllerModel controller) throws Exception {
+        returnModel = new ReturnModel();
+        DoorControlResponse response = null;
+        response = service.rbacClear(controller);
+        if(null!=response && response.getErrCode()==0){
+            returnModel.setObject(response);
+        } else {
+            returnModel.setSuccess(false);
+            returnModel.setException("清除权限失败");
+        }
+        return returnModel;
+    }
+
 }

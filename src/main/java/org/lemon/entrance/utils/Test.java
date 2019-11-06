@@ -1,6 +1,9 @@
 package org.lemon.entrance.utils;
 
 
+import org.lemon.entrance.model.EntranceControllerModel;
+import org.lemon.entrance.service.DoorControlService;
+
 import java.text.ParseException;
 
 public class Test {
@@ -10,11 +13,11 @@ public class Test {
      */
     public static void main(String args[]) throws ParseException {
 //        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-//        EntranceController doorController=new EntranceController();
-//        doorController.devsn="122217403";
-//        doorController.ip="192.168.1.10";
-//        doorController.port=60000;
-//        DoorControlService controlService=new DoorControlService();
+        EntranceControllerModel doorController=new EntranceControllerModel();
+        doorController.setDevsn("122217403");
+        doorController.setIp("192.168.1.10");
+        doorController.setPort(60000);
+        DoorControlService controlService=new DoorControlService();
 //        DoorControlResponse response =  controlService.queryRecordIndex(doorController,0xffffffff);
 ////        DoorControlResponse response =  controlService.rbacCount(doorController);
 //        if(response.success) {
@@ -39,8 +42,9 @@ public class Test {
 //            LoggerUtils.debug(Test.class,response.getMsg());
 //        }
 //        LoggerUtils.info("好的");
-        System.out.println( ByteUtils.intToHex(30)==(byte)(0x30) );
-//        controlService.setDoorOpenDelay(doorController,1,0x05,0x03);
+//        System.out.println( ByteUtils.intToHex(30)==(byte)(0x30) );
+          DoorControlResponse response =  controlService.setDoorOpenDelay(doorController,1,10,03);
+          LoggerUtils.info(response.msg);
 //        controlService.openDoor(doorController,1);
 //        LoggerUtils.error(Test.class,"开门",null);
 //        for (int t = 0; t <response.getRelayStatus().length ; t++) {
