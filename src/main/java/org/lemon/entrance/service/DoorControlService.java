@@ -288,18 +288,17 @@ public class DoorControlService {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x90;
-        String ips[] = listenIp.split(".");
+        String ips[] = listenIp.split("\\.");
         if(ips.length==4){
-            packet.data[0] = Byte.parseByte(ips[0]);
-            packet.data[1] = Byte.parseByte(ips[0]);
-            packet.data[2] = Byte.parseByte(ips[0]);
-            packet.data[3] = Byte.parseByte(ips[0]);
+            packet.data[0] =ByteUtils.intToHexByte(Integer.parseInt(ips[0]));
+            packet.data[1] = ByteUtils.intToHexByte(Integer.parseInt(ips[1]));
+            packet.data[2] = ByteUtils.intToHexByte(Integer.parseInt(ips[2]));
+            packet.data[3] = ByteUtils.intToHexByte(Integer.parseInt(ips[3]));
         }
         packet.data[4] = (byte)((listenPort & 0xff));
         packet.data[5] = (byte)((listenPort >> 8) & 0xff);
         //每隔5秒发送一次: 05 (定时上传信息的周期为5秒 [正常运行时每隔5秒发送一次  有刷卡时立即发送])
         packet.data[6] = 5;
-
         DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         if(res.getRecv()[8]==1){
             res.setSuccess(true);
