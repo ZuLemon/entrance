@@ -342,7 +342,7 @@ public class ByteUtils {
      * @return
      */
     public static int intToHex(int num) {
-        LoggerUtils.info(String.valueOf(num));
+//        LoggerUtils.info(String.valueOf(num));
         return Integer.parseInt(String.valueOf(num),16);
     }
 

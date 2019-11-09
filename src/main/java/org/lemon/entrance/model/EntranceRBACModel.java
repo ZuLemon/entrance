@@ -10,8 +10,8 @@ public class EntranceRBACModel  {
     String cid;
     Date tmstart;
     Date tmend;
-    Integer door1;
-    Integer door2;
-    Integer door3;
-    Integer door4;
+    Integer door1=0;
+    Integer door2=0;
+    Integer door3=0;
+    Integer door4=0;
 }

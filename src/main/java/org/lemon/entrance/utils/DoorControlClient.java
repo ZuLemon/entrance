@@ -19,19 +19,19 @@ public class DoorControlClient {
 //        for(int i=0;i<recv.length;i++){
 //            System.out.print(String.format("%02X ",recv[i]));
 //        }
-//        LoggerUtils.debug(DoorControlClient.class,"接收字节"+recv.length);
+//        LoggerUtils.debug("接收字节"+recv.length);
 //        EntranceLog log=new EntranceLog();
         Long devsn= ByteUtils.bytesToLong(recv);
 //        ByteUtils.byteToLong(recv, 4, 4);
 //        log.setDevsn(devsn.toString());
-//        LoggerUtils.debug(DoorControlClient.class,devsn.toString());
+//        LoggerUtils.debug(devsn.toString());
         //8-11	记录的索引号
         //(=0表示没有记录)	4	0x00000000
         long recordIndex = 0L;
         recordIndex = (long) ByteUtils.bytesToLong(recv);
 //        ByteUtils.byteToLong(recv, 8, 4);
 //        log.setIndex(recordIndex);
-//        LoggerUtils.debug(DoorControlClient.class, String.valueOf(recordIndex));
+//        LoggerUtils.debug( String.valueOf(recordIndex));
 
         //12	记录类型**********************************************
         //0=无记录
@@ -41,35 +41,35 @@ public class DoorControlClient {
         //0xFF=表示指定索引位的记录已被覆盖掉了.  请使用索引0, 取回最早一条记录的索引值
         int recordType=recv[12];
 //        log.setType(recordType);
-//        LoggerUtils.debug(DoorControlClient.class,"记录类型"+recordType);
+//        LoggerUtils.debug("记录类型"+recordType);
 
         //13	有效性(0 表示不通过, 1表示通过)	1
         int recordValid = recv[13];
 //        log.setPass((int)recv[13]);
-//        LoggerUtils.debug(DoorControlClient.class,String.valueOf((int)recv[13]));
+//        LoggerUtils.debug(String.valueOf((int)recv[13]));
 
         //14	门号(1,2,3,4)	1
         int recordDoorNO = recv[14];
 //        log.setDoor((int)recv[13]);
-//        LoggerUtils.debug(DoorControlClient.class,String.valueOf((int)recv[13]));
+//        LoggerUtils.debug(String.valueOf((int)recv[13]));
         //15	进门/出门(1表示进门, 2表示出门)	1	0x01
         int recordInOrOut = recv[15];
 //        log.setEntrance((int)recv[15]);
-//        LoggerUtils.debug(DoorControlClient.class,"recv[15]>"+String.valueOf((int)recv[15]));
+//        LoggerUtils.debug("recv[15]>"+String.valueOf((int)recv[15]));
         //16-19	卡号(类型是刷卡记录时)
         //或编号(其他类型记录)	4
         String recordCardNO = null;
         recordCardNO = String.valueOf(ByteUtils.bytesToInt(ByteUtils.subBytes(recv,16,4)));
 //        ByteUtils.byteToHexString(recv, 16, 4);
 //        log.setEid(recordCardNO);
-//        LoggerUtils.debug(DoorControlClient.class,"recordCardNO>"+recordCardNO);
+//        LoggerUtils.debug("recordCardNO>"+recordCardNO);
         //20-26	刷卡时间:
         //年月日时分秒 (采用BCD码)见设置时间部分的说明
         String recordTime = "2000-01-01 00:00:00";
         recordTime = String.format("%02x%02x-%02x-%02x %02x:%02x:%02x",
                 recv[20], recv[21], recv[22], recv[23], recv[24], recv[25], recv[26]);
 //        log.setCreateDate(DateTimeUtils.sm_sf_parse(recordTime));
-//        LoggerUtils.debug(DoorControlClient.class,recordTime);
+//        LoggerUtils.debug(recordTime);
 
         //2012.12.11 10:49:59	7
         //27	记录原因代码(可以查 “刷卡记录说明.xls”文件的ReasonNO)
@@ -85,13 +85,13 @@ public class DoorControlClient {
         {
             //log(string.Format("索引位={0}  无记录", recordIndex));
 //            log.setRemarks("索引位="+recordIndex+"  无记录");
-//            LoggerUtils.debug(DoorControlClient.class,"索引位="+recordIndex+"  无记录");
+//            LoggerUtils.debug("索引位="+recordIndex+"  无记录");
 
         }
         else if (recordType == 0xff)
         {
 //            log.setRemarks(" 指定索引位的记录已被覆盖掉了,请使用索引0, 取回最早一条记录的索引值");
-//            LoggerUtils.debug(DoorControlClient.class,"指定索引位的记录已被覆盖掉了,请使用索引0, 取回最早一条记录的索引值");
+//            LoggerUtils.debug("指定索引位的记录已被覆盖掉了,请使用索引0, 取回最早一条记录的索引值");
         }
         else if (recordType == 1) //2015-06-10 08:49:31 显示记录类型为卡号的数据
         {
@@ -104,23 +104,23 @@ public class DoorControlClient {
             //log(string.Format("  时间 = {0}", recordTime));
             //log(string.Format("  描述 = {0}", getReasonDetailChinese(reason)));
 //            log.setRemarks(getReasonDetailChinese(reason));
-//            LoggerUtils.debug(DoorControlClient.class,"卡开门 索引位=  "+recordIndex);
-//            LoggerUtils.debug(DoorControlClient.class,"编号= "+recordCardNO);
-//            LoggerUtils.debug(DoorControlClient.class,"门号=  "+recordDoorNO);
-//            LoggerUtils.debug(DoorControlClient.class,"进出=  "+ (recordInOrOut == 1 ? "进门" : "出门"));
-//            LoggerUtils.debug(DoorControlClient.class,"有效=  "+(recordValid == 1 ? "通过" : "禁止"));
-//            LoggerUtils.debug(DoorControlClient.class,"时间=  "+recordTime);
-//            LoggerUtils.debug(DoorControlClient.class,"描述 = "+getReasonDetailChinese(reason));
+            LoggerUtils.debug("卡开门 索引位=  "+recordIndex);
+            LoggerUtils.debug("编号= "+recordCardNO);
+            LoggerUtils.debug("门号=  "+recordDoorNO);
+            LoggerUtils.debug("进出=  "+ (recordInOrOut == 1 ? "进门" : "出门"));
+            LoggerUtils.debug("有效=  "+(recordValid == 1 ? "通过" : "禁止"));
+            LoggerUtils.debug("时间=  "+recordTime);
+            LoggerUtils.debug("描述 = "+getReasonDetailChinese(reason));
         }
         else if (recordType == 2)
         {
             //其他处理
             //门磁,按钮, 设备启动, 远程开门记录
-//            LoggerUtils.debug(DoorControlClient.class,"远程开门记录 索引位=  "+recordIndex);
-//            LoggerUtils.debug(DoorControlClient.class,"编号= "+recordCardNO);
-//            LoggerUtils.debug(DoorControlClient.class,"门号=  "+recordDoorNO);
-//            LoggerUtils.debug(DoorControlClient.class,"时间=  "+recordTime);
-//            LoggerUtils.debug(DoorControlClient.class,"描述 = "+getReasonDetailChinese(reason));
+            LoggerUtils.debug("远程开门记录 索引位=  "+recordIndex);
+            LoggerUtils.debug("编号= "+recordCardNO);
+            LoggerUtils.debug("门号=  "+recordDoorNO);
+            LoggerUtils.debug("时间=  "+recordTime);
+            LoggerUtils.debug("描述 = "+getReasonDetailChinese(reason));
         }
         else if (recordType == 3)
         {
@@ -132,11 +132,11 @@ public class DoorControlClient {
             //log(string.Format("  时间 = {0}", recordTime));
             //log(string.Format("  描述 = {0}", getReasonDetailChinese(reason)));
 //            log.setRemarks(getReasonDetailChinese(reason));
-//            LoggerUtils.debug(DoorControlClient.class,"报警记录索引位=  "+recordIndex);
-//            LoggerUtils.debug(DoorControlClient.class,"编号= "+recordCardNO);
-//            LoggerUtils.debug(DoorControlClient.class,"门号=  "+recordDoorNO);
-//            LoggerUtils.debug(DoorControlClient.class,"时间=  "+recordTime);
-//            LoggerUtils.debug(DoorControlClient.class,"描述 = "+getReasonDetailChinese(reason));
+            LoggerUtils.debug("报警记录索引位=  "+recordIndex);
+            LoggerUtils.debug("编号= "+recordCardNO);
+            LoggerUtils.debug("门号=  "+recordDoorNO);
+            LoggerUtils.debug("时间=  "+recordTime);
+            LoggerUtils.debug("描述 = "+getReasonDetailChinese(reason));
         }
         return "日志";
     }

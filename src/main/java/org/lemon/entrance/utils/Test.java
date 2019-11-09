@@ -21,9 +21,9 @@ public class Test {
 //        DoorControlResponse response =  controlService.queryRecordIndex(doorController,0xffffffff);
 ////        DoorControlResponse response =  controlService.rbacCount(doorController);
 //        if(response.success) {
-//            LoggerUtils.debug(Test.class,"msg:"+response.getMsg());
+//            LoggerUtils.debug("msg:"+response.getMsg());
 //        }else {
-//            LoggerUtils.error(Test.class, response.getMsg());
+//            LoggerUtils.error( response.getMsg());
 //        }
 
 //        EntranceRBACModel EntranceRBACModel=new EntranceRBACModel();
@@ -43,14 +43,19 @@ public class Test {
 //        }
 //        LoggerUtils.info("好的");
 //        System.out.println( ByteUtils.intToHex(30)==(byte)(0x30) );
-          DoorControlResponse response =  controlService.setDoorOpenDelay(doorController,1,10,03);
-          LoggerUtils.info(response.msg);
+//          DoorControlResponse response =  controlService.setDoorOpenDelay(doorController,1,10,03);
+//          LoggerUtils.info(response.msg);
 //        controlService.openDoor(doorController,1);
 //        LoggerUtils.error(Test.class,"开门",null);
 //        for (int t = 0; t <response.getRelayStatus().length ; t++) {
 //            LoggerUtils.debug(Test.class, String.valueOf(response.getRelayStatus()[t]));
 //        }
 //        System.out.println(intToByteArray(30)[3]);
+        DoorControlResponse response=controlService.setListenServer(doorController,"192.168.1.5",61005);
+        if(response.getErrCode()==0){
+            LoggerUtils.debug(response.getMsg());
+        }
+
     }
 
 

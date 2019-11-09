@@ -141,7 +141,7 @@ public class EntranceControllerController {
      *    		"cid":"22323636",
      *    		"tmstart":"2019-11-06 10:00:00",
      *    		"tmend":"2019-12-01 10:00:00",
-     *    		"door1":01
+     *    		"door1":1
      *    	}
      *    }
      * @return
@@ -150,6 +150,7 @@ public class EntranceControllerController {
     @RequestMapping("rbacInsertOrUpdate")
     @ResponseBody
     public ReturnModel rbacInsertOrUpdate(@RequestBody Map<String,Object> models) throws Exception {
+        LoggerUtils.info(models.toString());
         returnModel = new ReturnModel();
         EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
         EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
