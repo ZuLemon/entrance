@@ -48,13 +48,19 @@ public class EntranceControllerController {
     @ResponseBody
     public ReturnModel openDoor(@RequestBody EntranceControllerModel controller, @PathVariable("door") int door) {
         returnModel = new ReturnModel();
-        DoorControlResponse response =  service.openDoor(controller,door);
-        if(null!=response && response.getErrCode()==0){
-            returnModel.setObject(response);
-        }else {
+        try {
+            DoorControlResponse response =  service.openDoor(controller,door);
+            if(null!=response && response.getErrCode()==0){
+                returnModel.setObject(response);
+            }else {
+                returnModel.setSuccess(false);
+                returnModel.setException("开门失败:"+response.getMsg());
+            }
+        }catch (Exception e) {
             returnModel.setSuccess(false);
-            returnModel.setException("开门失败:"+response.getMsg());
+            returnModel.setException("开门失败:"+e.getMessage());
         }
+
 //        LoggerUtils.info(String.valueOf(door));
         return returnModel;
     }
@@ -71,13 +77,19 @@ public class EntranceControllerController {
     @ResponseBody
     public ReturnModel setDoorOpenDelay(@RequestBody EntranceControllerModel controller, @PathVariable("door") int door, int delay, int online) {
         returnModel = new ReturnModel();
-        DoorControlResponse response = service.setDoorOpenDelay(controller, door, delay, online);
-        if(null!=response && response.getErrCode()==0){
-            returnModel.setObject(response);
-        } else {
+        try {
+            DoorControlResponse response = service.setDoorOpenDelay(controller, door, delay, online);
+            if(null!=response && response.getErrCode()==0){
+                returnModel.setObject(response);
+            } else {
+                returnModel.setSuccess(false);
+                returnModel.setException("设置失败:"+response.getMsg());
+            }
+        } catch (Exception e) {
             returnModel.setSuccess(false);
-            returnModel.setException("设置失败:"+response.getMsg());
+            returnModel.setException("设置失败:"+e.getMessage());
         }
+
         return returnModel;
     }
 
@@ -90,13 +102,19 @@ public class EntranceControllerController {
     @ResponseBody
     public ReturnModel timeRead(@RequestBody EntranceControllerModel controller) {
         returnModel = new ReturnModel();
-        DoorControlResponse response = service.timeRead(controller);
-        if(null!=response && response.getErrCode()==0){
-            returnModel.setObject(response);
-        } else {
+        try {
+            DoorControlResponse response = service.timeRead(controller);
+            if(null!=response && response.getErrCode()==0){
+                returnModel.setObject(response);
+            } else {
+                returnModel.setSuccess(false);
+                returnModel.setException("读取时间失败:"+response.getMsg());
+            }
+        } catch (Exception e) {
             returnModel.setSuccess(false);
-            returnModel.setException("读取时间失败:"+response.getMsg());
+            returnModel.setException("读取时间失败:"+e.getMessage());
         }
+
         return returnModel;
     }
 
@@ -122,6 +140,9 @@ public class EntranceControllerController {
         } catch (ParseException e) {
             returnModel.setSuccess(false);
             returnModel.setException("时间转换失败");
+        } catch (Exception e) {
+            returnModel.setSuccess(false);
+            returnModel.setException("设置时间失败:"+e.getMessage());
         }
 
         return returnModel;
@@ -149,19 +170,25 @@ public class EntranceControllerController {
      */
     @RequestMapping("rbacInsertOrUpdate")
     @ResponseBody
-    public ReturnModel rbacInsertOrUpdate(@RequestBody Map<String,Object> models) throws Exception {
+    public ReturnModel rbacInsertOrUpdate(@RequestBody Map<String,Object> models) {
         LoggerUtils.info(models.toString());
         returnModel = new ReturnModel();
-        EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
-        EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
-        DoorControlResponse response = null;
-        response = service.rbacInsertOrUpdate(controllerModel, rbacModel);
-        if(null!=response && response.getErrCode()==0){
-            returnModel.setObject(response);
-        } else {
+        try {
+            EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
+            EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
+            DoorControlResponse response = null;
+            response = service.rbacInsertOrUpdate(controllerModel, rbacModel);
+            if(null!=response && response.getErrCode()==0){
+                returnModel.setObject(response);
+            } else {
+                returnModel.setSuccess(false);
+                returnModel.setException("添加权限失败:"+response.getMsg());
+            }
+        } catch (Exception e) {
             returnModel.setSuccess(false);
-            returnModel.setException("添加权限失败:"+response.getMsg());
+            returnModel.setException("添加权限失败:"+e.getMessage());
         }
+
         return returnModel;
     }
 
@@ -173,33 +200,46 @@ public class EntranceControllerController {
      */
     @RequestMapping("rbacRemove")
     @ResponseBody
-    public ReturnModel rbacRemove(@RequestBody Map<String,Object> models) throws Exception {
+    public ReturnModel rbacRemove(@RequestBody Map<String,Object> models) {
         returnModel = new ReturnModel();
-        EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
-        EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
-        DoorControlResponse response = null;
-        response = service.rbacRemove(controllerModel, rbacModel);
-        if(null!=response && response.getErrCode()==0){
-            returnModel.setObject(response);
-        } else {
+        try {
+            EntranceControllerModel controllerModel = JsonXMLUtils.mapToObj((Map<String,Object>) models.get("controller"),EntranceControllerModel.class);
+            EntranceRBACModel rbacModel=JsonXMLUtils.mapToObj((Map<String,Object>) models.get("rbac"),EntranceRBACModel.class);
+            DoorControlResponse response = null;
+            response = service.rbacRemove(controllerModel, rbacModel);
+            if(null!=response && response.getErrCode()==0){
+                returnModel.setObject(response);
+            } else {
+                returnModel.setSuccess(false);
+                returnModel.setException("清除权限失败:"+response.getMsg());
+            }
+        } catch (Exception e) {
             returnModel.setSuccess(false);
-            returnModel.setException("清除权限失败:"+response.getMsg());
+            returnModel.setException("清除权限失败:"+e.getMessage());
+
         }
+
         return returnModel;
     }
 
     @RequestMapping("rbacClear")
     @ResponseBody
-    public ReturnModel rbacClear(@RequestBody EntranceControllerModel controller) throws Exception {
+    public ReturnModel rbacClear(@RequestBody EntranceControllerModel controller)  {
         returnModel = new ReturnModel();
         DoorControlResponse response = null;
-        response = service.rbacClear(controller);
-        if(null!=response && response.getErrCode()==0){
-            returnModel.setObject(response);
-        } else {
+        try {
+            response = service.rbacClear(controller);
+            if(null!=response && response.getErrCode()==0){
+                returnModel.setObject(response);
+            } else {
+                returnModel.setSuccess(false);
+                returnModel.setException("清除权限失败:"+response.getMsg());
+            }
+        }catch (Exception e) {
             returnModel.setSuccess(false);
-            returnModel.setException("清除权限失败:"+response.getMsg());
+            returnModel.setException("清除权限失败:"+e.getMessage());
         }
+
         return returnModel;
     }
 

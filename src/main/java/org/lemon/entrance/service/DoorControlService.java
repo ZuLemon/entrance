@@ -66,7 +66,7 @@ public class DoorControlService {
      * @param door
      * @return
      */
-    public DoorControlResponse openDoor(EntranceControllerModel controller, int door) {
+    public DoorControlResponse openDoor(EntranceControllerModel controller, int door) throws Exception {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x40;
@@ -75,8 +75,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+          throw new Exception(e.getMessage());
         }
         res.setSuccess(res.getRecv()[8]==1);
         return res;
@@ -89,7 +88,7 @@ public class DoorControlService {
      * @param online 0x03在线 0x02 常闭 01常开
      * @return
      */
-    public DoorControlResponse setDoorOpenDelay(EntranceControllerModel controller, int door, int delay, int online) {
+    public DoorControlResponse setDoorOpenDelay(EntranceControllerModel controller, int door, int delay, int online) throws Exception {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x80;
@@ -102,8 +101,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null) {
             if (res.getRecv()[0] == res.getRecv()[8] && res.getRecv()[1] == res.getRecv()[9] && res.getRecv()[2] == res.getRecv()[10]) {
@@ -117,7 +115,7 @@ public class DoorControlService {
         return res;
     }
 
-    public DoorControlResponse timeCheck(EntranceControllerModel controller,String date) throws ParseException {
+    public DoorControlResponse timeCheck(EntranceControllerModel controller,String date) throws Exception {
         Calendar calendar=Calendar.getInstance();
         Date myDate2 = dateFormat2.parse(date);
         calendar.setTime(myDate2);
@@ -135,8 +133,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null) {
             Boolean bSame = true;
@@ -158,7 +155,7 @@ public class DoorControlService {
         return res;
     }
 
-    public DoorControlResponse timeRead(EntranceControllerModel controller) {
+    public DoorControlResponse timeRead(EntranceControllerModel controller) throws Exception {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x32;
@@ -166,8 +163,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null){
             res.setSuccess(true);
@@ -178,7 +174,7 @@ public class DoorControlService {
      * 添加或修改
      * @param rbac
      */
-    public DoorControlResponse rbacInsertOrUpdate(EntranceControllerModel controller, EntranceRBACModel rbac) {
+    public DoorControlResponse rbacInsertOrUpdate(EntranceControllerModel controller, EntranceRBACModel rbac) throws Exception {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x50;
@@ -217,8 +213,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null){
             if(res.getRecv()[8]==1) {
@@ -238,7 +233,7 @@ public class DoorControlService {
      * @param rbac
      * @return
      */
-    public DoorControlResponse rbacRemove(EntranceControllerModel controller, EntranceRBACModel rbac) {
+    public DoorControlResponse rbacRemove(EntranceControllerModel controller, EntranceRBACModel rbac) throws Exception {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x52;
@@ -251,8 +246,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null){
             if(res.getRecv()[8]==1) {
@@ -271,7 +265,7 @@ public class DoorControlService {
      * @param controller
      * @return
      */
-    public DoorControlResponse rbacClear(EntranceControllerModel controller) {
+    public DoorControlResponse rbacClear(EntranceControllerModel controller) throws Exception {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x54;
@@ -283,8 +277,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null){
             if(res.getRecv()[8]==1) {
@@ -301,7 +294,7 @@ public class DoorControlService {
      * @param controller
      * @return
      */
-    public DoorControlResponse rbacCount(EntranceControllerModel controller) {
+    public DoorControlResponse rbacCount(EntranceControllerModel controller) throws Exception {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x58;
@@ -309,8 +302,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null){
             res.setSuccess(true);
@@ -324,7 +316,7 @@ public class DoorControlService {
      * @param controller
      * @return
      */
-    public DoorControlResponse getIndexRbac(EntranceControllerModel controller, int index) {
+    public DoorControlResponse getIndexRbac(EntranceControllerModel controller, int index) throws Exception {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x5C;
@@ -333,8 +325,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res!=null){
             res.setSuccess(true);
@@ -350,7 +341,7 @@ public class DoorControlService {
      * @param listenPort
      * @return
      */
-    public DoorControlResponse setListenServer(EntranceControllerModel controller,String listenIp,Integer listenPort) {
+    public DoorControlResponse setListenServer(EntranceControllerModel controller,String listenIp,Integer listenPort) throws Exception {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x90;
@@ -369,8 +360,7 @@ public class DoorControlService {
         try {
             res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
         } catch (Exception e) {
-            res.setSuccess(false);
-            res.setMsg(e.getMessage());
+            throw new Exception(e.getMessage());
         }
         if(res.getRecv()[8]==1){
             res.setSuccess(true);

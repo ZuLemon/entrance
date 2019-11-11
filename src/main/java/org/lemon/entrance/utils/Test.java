@@ -11,13 +11,13 @@ public class Test {
      * 卡号 22323636
      * @param args
      */
-    public static void main(String args[]) throws ParseException {
+    public static void main(String args[])  {
 //        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-        EntranceControllerModel doorController=new EntranceControllerModel();
-        doorController.setDevsn("122217403");
-        doorController.setIp("192.168.1.10");
-        doorController.setPort(60000);
-        DoorControlService controlService=new DoorControlService();
+//        EntranceControllerModel doorController=new EntranceControllerModel();
+//        doorController.setDevsn("122217403");
+//        doorController.setIp("192.168.1.10");
+//        doorController.setPort(60000);
+//        DoorControlService controlService=new DoorControlService();
 //        DoorControlResponse response =  controlService.queryRecordIndex(doorController,0xffffffff);
 ////        DoorControlResponse response =  controlService.rbacCount(doorController);
 //        if(response.success) {
@@ -51,10 +51,10 @@ public class Test {
 //            LoggerUtils.debug(Test.class, String.valueOf(response.getRelayStatus()[t]));
 //        }
 //        System.out.println(intToByteArray(30)[3]);
-        DoorControlResponse response=controlService.setListenServer(doorController,"192.168.1.5",61005);
-        if(response.getErrCode()==0){
-            LoggerUtils.debug(response.getMsg());
-        }
+//        DoorControlResponse response=controlService.setListenServer(doorController,"192.168.1.5",61005);
+//        if(response.getErrCode()==0){
+//            LoggerUtils.debug(response.getMsg());
+//        }
 
     }
 
