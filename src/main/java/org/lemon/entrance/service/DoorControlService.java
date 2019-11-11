@@ -23,7 +23,13 @@ public class DoorControlService {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x20;
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             res.setSuccess(true);
         }
@@ -41,7 +47,13 @@ public class DoorControlService {
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0xB0;
         packet.data=ByteUtils.intToBytes(index);
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             res.setSuccess(true);
         }
@@ -59,7 +71,13 @@ public class DoorControlService {
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x40;
         packet.data[0] = (byte)(door & 0xff); //2013-11-03 20:56:33
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         res.setSuccess(res.getRecv()[8]==1);
         return res;
     }
@@ -80,7 +98,13 @@ public class DoorControlService {
         packet.data[1] = (byte)(online & 0xff);
         packet.data[2] = (byte)(delay & 0xff);
 
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null) {
             if (res.getRecv()[0] == res.getRecv()[8] && res.getRecv()[1] == res.getRecv()[9] && res.getRecv()[2] == res.getRecv()[10]) {
                 //成功时, 返回值与设置一致
@@ -107,7 +131,13 @@ public class DoorControlService {
         packet.data[4] = ByteUtils.intToHexByte(calendar.get(Calendar.HOUR_OF_DAY));
         packet.data[5] = ByteUtils.intToHexByte(calendar.get(Calendar.MINUTE));
         packet.data[6] = ByteUtils.intToHexByte(calendar.get(Calendar.SECOND));
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null) {
             Boolean bSame = true;
             for (int i = 0; i < 7; i++)
@@ -132,7 +162,13 @@ public class DoorControlService {
         DoorControlPacket packet=new DoorControlPacket();
         packet.iDevSn=Long.parseLong(controller.getDevsn());
         packet.functionID=0x32;
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             res.setSuccess(true);
         }
@@ -177,7 +213,13 @@ public class DoorControlService {
         //01 允许通过 四号门 [对四门控制器有效]
         packet.data[15] = rbac.getDoor4().byteValue();
 
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             if(res.getRecv()[8]==1) {
                 res.setSuccess(true);
@@ -205,7 +247,13 @@ public class DoorControlService {
         packet.data[1]=cidb[1];
         packet.data[2]=cidb[2];
         packet.data[3]=cidb[3];
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             if(res.getRecv()[8]==1) {
                 res.setSuccess(true);
@@ -231,7 +279,13 @@ public class DoorControlService {
         packet.data[1]=(byte)0xaa;
         packet.data[2]=(byte)0xaa;
         packet.data[3]=0x55;
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             if(res.getRecv()[8]==1) {
                 res.setSuccess(true);
@@ -251,7 +305,13 @@ public class DoorControlService {
         DoorControlPacket packet = new DoorControlPacket();
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x58;
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             res.setSuccess(true);
             res.setMsg(String.valueOf(ByteUtils.bytesToInt(ByteUtils.subBytes(res.getRecv(),8,4))));
@@ -269,7 +329,13 @@ public class DoorControlService {
         packet.iDevSn = Long.parseLong(controller.getDevsn());
         packet.functionID=0x5C;
         packet.data=ByteUtils.intToBytes(index);
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res!=null){
             res.setSuccess(true);
             res.setMsg(String.valueOf(ByteUtils.bytesToInt(ByteUtils.subBytes(res.getRecv(),8,4))));
@@ -299,7 +365,13 @@ public class DoorControlService {
         packet.data[5] = (byte)((listenPort >> 8) & 0xff);
         //每隔5秒发送一次: 05 (定时上传信息的周期为5秒 [正常运行时每隔5秒发送一次  有刷卡时立即发送])
         packet.data[6] = 5;
-        DoorControlResponse res= DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        DoorControlResponse res= null;
+        try {
+            res = DoorControlClient.send(packet.toDatagramPacket(controller.getIp(),controller.getPort()));
+        } catch (Exception e) {
+            res.setSuccess(false);
+            res.setMsg(e.getMessage());
+        }
         if(res.getRecv()[8]==1){
             res.setSuccess(true);
             res.setMsg("设置接收服务器的IP和端口 \t 成功...");

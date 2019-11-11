@@ -49,7 +49,7 @@ public class DoorControlResponse {
         code=0;
         msg="操作成功";
         recv=packet.getData();
-        String v= DoorControlClient.parseRcordInfo(recv);
+//        DoorControlClient.parseRcordInfo(recv);
         //	其他信息
         //28	1号门门磁(0表示关上, 1表示打开)	1	0x00
         doorStatus[1 - 1] = recv[28];

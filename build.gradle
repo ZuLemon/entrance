@@ -20,6 +20,7 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: '2.0.0-alpha1'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.0-alpha1'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+//    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     compileOnly "org.projectlombok:lombok:1.16.20"
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.62'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.6'

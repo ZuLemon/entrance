@@ -274,6 +274,13 @@ public class ByteUtils {
                 | (0xff000000 & (bytes[3] << 24));
     }
 
+    public static int bytesToInt(byte[] bytes,int start,int len) {
+        bytes=subBytes(bytes,start,len);
+        return (0xff & bytes[0]) | (0xff00 & (bytes[1] << 8))
+                | (0xff0000 & (bytes[2] << 16))
+                | (0xff000000 & (bytes[3] << 24));
+    }
+
     /**
      * byte型转换成long型
      * @param bytes

@@ -53,7 +53,7 @@ public class EntranceControllerController {
             returnModel.setObject(response);
         }else {
             returnModel.setSuccess(false);
-            returnModel.setException("开门失败");
+            returnModel.setException("开门失败:"+response.getMsg());
         }
 //        LoggerUtils.info(String.valueOf(door));
         return returnModel;
@@ -76,7 +76,7 @@ public class EntranceControllerController {
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
-            returnModel.setException("设置失败");
+            returnModel.setException("设置失败:"+response.getMsg());
         }
         return returnModel;
     }
@@ -95,7 +95,7 @@ public class EntranceControllerController {
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
-            returnModel.setException("读取时间失败");
+            returnModel.setException("读取时间失败:"+response.getMsg());
         }
         return returnModel;
     }
@@ -117,7 +117,7 @@ public class EntranceControllerController {
                 returnModel.setObject(response);
             } else {
                 returnModel.setSuccess(false);
-                returnModel.setException("设置时间失败");
+                returnModel.setException("设置时间失败:"+response.getMsg());
             }
         } catch (ParseException e) {
             returnModel.setSuccess(false);
@@ -160,7 +160,7 @@ public class EntranceControllerController {
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
-            returnModel.setException("添加权限失败");
+            returnModel.setException("添加权限失败:"+response.getMsg());
         }
         return returnModel;
     }
@@ -183,7 +183,7 @@ public class EntranceControllerController {
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
-            returnModel.setException("清除权限失败");
+            returnModel.setException("清除权限失败:"+response.getMsg());
         }
         return returnModel;
     }
@@ -198,7 +198,7 @@ public class EntranceControllerController {
             returnModel.setObject(response);
         } else {
             returnModel.setSuccess(false);
-            returnModel.setException("清除权限失败");
+            returnModel.setException("清除权限失败:"+response.getMsg());
         }
         return returnModel;
     }
